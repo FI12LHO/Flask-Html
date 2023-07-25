@@ -1,0 +1,56 @@
+import os
+import platform
+import subprocess
+
+
+host = 'localhost'
+port = 5000
+debug = False
+
+def run(host: str, port: int, debug: bool):
+    path = ''
+    
+    if platform.platform() == 'Linux':
+        path = '. ' + os.path.join('.venv', 'bin', 'activate')
+        pass
+    else:
+        path = os.path.join('.venv', 'Scripts', 'activate')
+        pass
+    
+    command = f"{path} && python -m flask --app src/main run --host={host} --port={port}"
+    
+    if debug:
+        command += " --debug"
+        
+    subprocess.run(command, shell=True)
+    
+    while True:
+        user_input = input("Digite 'sair' para encerrar o programa: ")
+        if user_input.lower() == 'sair':
+            break
+    pass
+
+def importModules():
+    if platform.platform() == 'Linux':
+        print('\n\tInstalando modulos necessarios ...')
+        os.system('python3 -m venv .venv')
+        os.system('. .venv/bin/activate && pip install -r requirements.txt >> temp.txt')
+        pass
+    else:
+        print('\n\tInstalando modulos necessarios ...')
+        os.system('python -m venv .venv')
+        os.system(os.path.join('.venv', 'Scripts', 'activate') + ' && pip install -r requirements.txt >> temp.txt')
+        pass
+    
+    os.system('cls || clear')
+    pass
+
+def main():
+    if not os.path.exists('temp.txt'):
+        importModules()
+
+    run(host, port, debug)
+    pass
+
+if __name__ == '__main__':
+    main()
